@@ -5,10 +5,10 @@
 2. Change directory into the cloned project, e.g. cd ~/Development/es-analytics
 3. Create your .env file
 ```
-ES_NODE=<hosted-url> // e.g. https://diy.es.us-west1.gcp.cloud.es.io
-ES_USERNAME=elastic
-ES_PASSWORD=<elastic-user-password>
-ES_ANALYTICS=<serverless-url> // e.g. https://diy-analytics-e12e01.es.us-central1.gcp.elastic.cloud:443
+ES_NODE=https://diy.es.us-west1.gcp.cloud.es.io
+ES_USERNAME=diy-user
+ES_PASSWORD=<password> 
+ES_ANALYTICS=https://diy-analytics-e12e01.es.us-central1.gcp.elastic.cloud:443
 ES_API_KEY=<api-key>
 ``` 
 3. Install the following dependencies:
