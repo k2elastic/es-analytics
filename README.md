@@ -12,8 +12,8 @@ ES_API_KEY=<api-key>
 For the password and api-key, email: kristin.kraus@elastic.co
 
 3. Install the following dependencies:
-  a. npm install express
-  b. npm install dotenv
+- npm install express
+- npm install dotenv
 4. Run: node server.js
 5. Open your browser and go to: http://localhost:3000/search.html
 
