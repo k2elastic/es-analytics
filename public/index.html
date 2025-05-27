@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Search Products</h1>
+  <form id="searchForm">
+    <input type="text" id="searchInput" placeholder="Search..." required />
+    <button type="submit">Search</button>
+  </form>
+
+  <script>
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const query = document.getElementById('searchInput').value;
+      window.location.href = `results.html?q=${encodeURIComponent(query)}`;
+    });
+  </script>
+</body>
+</html>
