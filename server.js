@@ -62,7 +62,7 @@ app.get('/search', async (req, res) => {
     // Track the search query
     trackUserAction('search_query', userId, { 
       query,
-      totalResults: totalHits
+      totalHits: totalHits
     }).catch(console.error);
 
     // Track each product in the result list
@@ -76,11 +76,12 @@ app.get('/search', async (req, res) => {
         productId,
         productName,
         position: index + 1, // 1-based index
-        query
+        query,
+        totalHits
       }).catch(console.error);
     });
 
-    res.json({ results });
+    res.json({ results, totalHits });
   } catch (error) {
     console.error('Search error:', error);
     res.status(500).json({ error: 'Search failed' });
@@ -107,7 +108,7 @@ app.get('/product', async (req, res) => {
 
 app.post('/click', async (req, res) => {
   const userId = req.user?.id || 'anonymous';
-  const { docId, productId, productName, position, query } = req.body;
+  const { docId, productId, productName, position, query, totalHits, score } = req.body;
 
   try {
     await trackUserAction('product_click', userId, {
@@ -115,7 +116,9 @@ app.post('/click', async (req, res) => {
       productId,     // Internal product ID
       productName,
       position,
-      query
+      query,
+      totalHits,
+      score
     });
 
     res.status(200).json({ success: true });
@@ -127,9 +130,9 @@ app.post('/click', async (req, res) => {
 
 // Add to Cart endpoint
 app.post('/cart', async (req, res) => {
-  //console.log('Cart request body:', req.body);
+  console.log('Cart request body:', req.body);
   const userId = req.user?.id || 'anonymous';
-  const { productId, productName } = req.body;
+  const { docId, productId, productName, position, query, totalHits, score } = req.body;
 
   if (!productId || !productName) {
     return res.status(400).json({ error: 'Missing product information' });
@@ -137,8 +140,13 @@ app.post('/cart', async (req, res) => {
 
   try {
     await trackUserAction('add_to_cart', userId, {
-      productId,
-      productName
+      docId,         // Elasticsearch document ID
+      productId,     // Internal product ID
+      productName,
+      position,
+      query,
+      totalHits,
+      score
     });
 
     res.status(200).json({ success: true });
