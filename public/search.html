@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>DIY Search Page</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
   <h1>Search Products</h1>
@@ -14,89 +14,9 @@
   </form>
 
   <div id="resultsContainer"></div>
-
-  <script>
-    document.getElementById('searchForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const query = document.getElementById('searchInput').value.trim();
-      const container = document.getElementById('resultsContainer');
-
-      if (!query) {
-        container.innerHTML = '<p>Please enter a search term.</p>';
-        return;
-      }
-
-      container.innerHTML = '<p>Searching...</p>';
-
-      try {
-        const res = await fetch(`/search?q=${encodeURIComponent(query)}`);
-        const data = await res.json();
-        container.innerHTML = '';
-
-        if (!data.results || data.results.length === 0) {
-          container.innerHTML = '<p>No results found.</p>';
-          return;
-        }
-
-        data.results.forEach((item, index) => {
-          const source = item._source;
-          const imageUrl = source.imageUrl_s && source.imageUrl_s.trim() !== "" 
-            ? source.imageUrl_s 
-            : 'default-image.jpg';
-          
-          const div = document.createElement('div');
-          div.className = 'result-item';
-          div.innerHTML = `
-            <table>
-              <tr>
-                <td>
-                  <a href="product.html?id=${item._id}" 
-                    onclick="return trackClick(event, '${item._id}', '${source.id}', '${source.title_s}', ${index + 1}, '${query}')">
-                    <img src="${imageUrl}" alt="${source.title_s}" style="width:100px;height:auto" />
-                  </a>
-                </td>
-                <td>
-                  <p><strong>Manufacturer:</strong> ${source.manufacturer_s} &nbsp; <strong>Category:</strong> ${source.baseCategory_s} &nbsp; <strong>Type:</strong> ${source.type_s}</p>
-                  <h3>${source.title_s}</h3>
-                  <font color="green"><strong>Why Match:</strong> ${item._explanation?.description || "N/A"}</font>
-                </td>
-              </tr>
-            </tr>
-          </table>             
-          `;
-          container.appendChild(div);
-        });
-      } catch (err) {
-        console.error(err);
-        container.innerHTML = '<p>Error loading results.</p>';
-      }
-    });
-    
-    function trackClick(event, docId, productId, productName, position, query) {
-      event.preventDefault(); // Stop the default navigation
-      
-      const url = event.currentTarget.href; // Get target URL
-      
-      fetch('/click', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        docId,
-        productId,
-        productName,
-        position,
-        query
-      })
-      }).catch(err => console.error('Tracking failed', err))
-        .finally(() => {
-          // Navigate after tracking (or error)
-          window.location.href = url;
-        });
-            
-      return false; // Prevent default link behavior
-    }
-  </script>
+  <!-- External JS file -->
+  <script src="/scripts/main.js"></script>
+  <!-- Search JS file relies on escapeHtml function defined in main.js -->
+  <script src="/scripts/search.js"></script>
 </body>
 </html>

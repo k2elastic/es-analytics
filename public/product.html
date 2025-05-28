@@ -3,60 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Product Details</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
-
-    #productContainer {
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: left;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      background-color: #f9f9f9;
-    }
-
-    #productContainer img {
-      display: block;
-      margin: 0 auto 20px auto;
-    }
-
-    .back-button {
-      display: inline-block;
-      margin-bottom: 20px;
-      padding: 8px 16px;
-      background-color: #007BFF;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-
-    .back-button:hover {
-      background-color: #0056b3;
-    }
-
-    #addToCartBtn {
-      display: block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    #addToCartBtn:hover {
-      background-color: #218838;
-    }
-  </style>
+  <link rel="stylesheet" href="./css/product.css">
 </head>
 <body>
   <a href="search.html" class="back-button">← Back to Search</a>
@@ -64,73 +11,8 @@
   <h1>Product Detail</h1>
   <div id="productContainer">Loading...</div>
 
-  <script>
-    async function getProduct() {
-      const params = new URLSearchParams(window.location.search);
-      const productId = params.get('id');
-      const container = document.getElementById('productContainer');
-
-      if (!productId) {
-        container.innerText = 'No product ID specified.';
-        return;
-      }
-
-      try {
-        const res = await fetch(`/product?id=${encodeURIComponent(productId)}`);
-        const data = await res.json();
-
-        if (!data.product) {
-          container.innerText = 'Product not found.';
-          return;
-        }
-
-        const item = data.product._source;
-        const imageUrl = item.imageUrl_s && item.imageUrl_s.trim() !== ""
-          ? item.imageUrl_s
-          : 'default-image.jpg'; // Replace with your actual default image path
-
-        container.innerHTML = `
-          <img src="${imageUrl}" alt="${item.title_s}" style="width:150px;" />
-          <h2>${item.title_s}</h2>
-          <p><strong>Manufacturer:</strong> ${item.manufacturer_s}</p>
-          <p><strong>Type:</strong> ${item.type_s}</p>
-          <p><strong>Series:</strong> ${item.series_s}</p>
-          <p><strong>Finish:</strong> ${item.finish_s}</p>
-          <button id="addToCartBtn">Add to Cart</button>
-        `;
-
-        // Add event listener for Add to Cart button
-        document.getElementById('addToCartBtn').addEventListener('click', async () => {
-          try {
-            const response = await fetch('/cart', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                productId: item.id,
-                productName: item.title_s
-              })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-              alert('Product added to cart!');
-            } else {
-              alert('Failed to add to cart.');
-            }
-          } catch (err) {
-            console.error('Error adding to cart:', err);
-            alert('An error occurred while adding to cart.');
-          }
-        });
-
-      } catch (err) {
-        console.error(err);
-        container.innerText = 'Error loading product details.';
-      }
-    }
-
-    getProduct();
-  </script>
+  <!-- External JS files -->
+  <script src="/scripts/main.js"></script>
+  <script src="/scripts/product.js"></script>
 </body>
 </html>
