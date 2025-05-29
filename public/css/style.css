@@ -14,3 +14,15 @@ input {
   margin: 10px 0;
   padding: 10px;
 }
+
+details summary {
+  font-weight: bold;
+  color: green;
+}
+details[open] summary::after {
+  content: " ▲";
+}
+details summary::after {
+  content: " ▼";
+}
+

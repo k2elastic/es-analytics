@@ -1,5 +1,4 @@
 // public/scripts/product.js
-console.log('Product JS loaded');
 async function getProduct() {
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
@@ -9,6 +8,7 @@ async function getProduct() {
     const position = parseInt(params.get('position'), 10);
     const totalHits = parseInt(params.get('totalHits'), 10);
     const score = parseFloat(params.get('score'));
+    const vectorField = params.get('vectorField');
 
     if (!productId) {
     	container.innerText = 'No product ID specified.';
@@ -55,7 +55,8 @@ async function getProduct() {
                 query,
                 position,
                 totalHits,
-                score
+                score,
+                vectorField
               })
             });
 
